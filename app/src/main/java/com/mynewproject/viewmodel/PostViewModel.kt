@@ -9,8 +9,8 @@ import com.mynewproject.repository.PostRepositoryInMemory
 class PostViewModel: ViewModel() {
 
     private val repository: PostRepository = PostRepositoryInMemory()
-    val data: LiveData<Post> = repository.get()
-    fun like() = repository.like()
-    fun share() = repository.share()
+    val data: LiveData<List<Post>> = repository.get()
+    fun like(id: Long) = repository.likeById(id)
+    fun share(id: Long) = repository.shareById(id)
 
 }
