@@ -2,6 +2,7 @@ package com.mynewproject.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,29 +11,29 @@ import com.mynewproject.ShortNumberFun.shortNumber
 import com.mynewproject.databinding.CardPostBinding
 import com.mynewproject.dto.Post
 
-typealias OnItemLikeListener = (post: Post) -> Unit
-typealias OnItemShareListener = (post: Post) -> Unit
+interface OnInteractionListener {
+
+    fun like(post: Post)
+    fun share(post: Post)
+    fun remove(post: Post)
+    fun edit(post: Post)
+}
 
 class PostAdapter(
-    private val onItemLikeListener: OnItemLikeListener,
-    private val onItemShareListener: OnItemShareListener
-) :
-    ListAdapter<Post, PostViewHolder>(PostDiffCallback) {
+    private val onInteractionListener: OnInteractionListener
+) : ListAdapter<Post, PostViewHolder>(PostDiffCallback) {
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): PostViewHolder {
         val binding = CardPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PostViewHolder(
-            binding, onItemLikeListener,
-            onItemShareListener
+            binding, onInteractionListener
         )
     }
 
     override fun onBindViewHolder(
-        holder: PostViewHolder,
-        position: Int
+        holder: PostViewHolder, position: Int
     ) {
         val post = getItem(position)
         holder.bind(post)
@@ -40,9 +41,7 @@ class PostAdapter(
 }
 
 class PostViewHolder(
-    private val binding: CardPostBinding,
-    private val onItemLikeListener: OnItemLikeListener,
-    private val onItemShareListener: OnItemShareListener
+    private val binding: CardPostBinding, private val onInteractionListener: OnInteractionListener
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(post: Post) {
         binding.apply {
@@ -62,10 +61,29 @@ class PostViewHolder(
                 icShare.setImageResource(R.drawable.ic_share_24)
             }
             icLikes.setOnClickListener {
-                onItemLikeListener(post)
+                onInteractionListener.like(post)
             }
             icShare.setOnClickListener {
-                onItemShareListener(post)
+                onInteractionListener.share(post)
+            }
+            menu.setOnClickListener {
+                PopupMenu(it.context, it).apply {
+                    inflate(R.menu.menu_post)
+                    setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.remove -> {
+                                onInteractionListener.remove(post)
+                                true
+                            }
+                            R.id.edit -> {
+                                onInteractionListener.edit(post)
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+                }.show()
+
             }
         }
     }
@@ -73,15 +91,13 @@ class PostViewHolder(
 
 object PostDiffCallback : DiffUtil.ItemCallback<Post>() {
     override fun areItemsTheSame(
-        oldItem: Post,
-        newItem: Post
+        oldItem: Post, newItem: Post
     ): Boolean {
         return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(
-        oldItem: Post,
-        newItem: Post
+        oldItem: Post, newItem: Post
     ): Boolean {
         return oldItem == newItem
     }
