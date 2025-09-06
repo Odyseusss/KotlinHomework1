@@ -6,7 +6,6 @@ import com.mynewproject.dto.Post
 
 class PostRepositoryInMemory : PostRepository {
 
-    private var nextId = 1L
     private var posts = listOf(
         Post(
             id = 1,
@@ -27,6 +26,8 @@ class PostRepositoryInMemory : PostRepository {
             likedByMe = false,
         ),
     )
+
+    private var nextId = posts.maxOfOrNull { it.id }?.plus(1) ?: 1L
 
     private val data = MutableLiveData(posts)
 
