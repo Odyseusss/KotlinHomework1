@@ -48,18 +48,24 @@ class PostViewHolder(
             author.text = post.author
             published.text = post.published
             content.text = post.content
-            likesCount.text = shortNumber(post.likes)
-            shareCount.text = shortNumber(post.shares)
-            if (post.likedByMe) {
-                icLikes.setImageResource(R.drawable.ic_liked_24)
-            } else {
-                icLikes.setImageResource(R.drawable.ic_favorite_24)
-            }
-            if (post.sharedByMe) {
-                icShare.setImageResource(R.drawable.ic_shared_24)
-            } else {
-                icShare.setImageResource(R.drawable.ic_share_24)
-            }
+//            likesCount.text = shortNumber(post.likes)
+//            shareCount.text = shortNumber(post.shares)
+//            if (post.likedByMe) {
+//                icLikes.setImageResource(R.drawable.ic_liked_24)
+//            } else {
+//                icLikes.setImageResource(R.drawable.ic_favorite_24)
+//            }
+//            if (post.sharedByMe) {
+//                icShare.setImageResource(R.drawable.ic_shared_24)
+//            } else {
+//                icShare.setImageResource(R.drawable.ic_share_24)
+//            }
+
+            icLikes.isChecked = post.likedByMe
+            icLikes.text = shortNumber(post.likes)
+            icShare.isChecked = post.sharedByMe
+            icShare.text = shortNumber(post.shares)
+
             icLikes.setOnClickListener {
                 onInteractionListener.like(post)
             }

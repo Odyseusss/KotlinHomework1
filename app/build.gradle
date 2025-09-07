@@ -38,13 +38,13 @@ dependencies {
     def activity_version = "1.10.0"
     def lifecycle_version = "2.8.7"
 
-    implementation 'androidx.core:core-ktx:1.16.0'
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'com.google.android.material:material:1.12.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
-    implementation "androidx.activity:activity-ktx:$activity_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation libs.androidx.core.ktx.v1160
+    implementation libs.androidx.appcompat.v170
+    implementation libs.material.v1120
+    implementation libs.androidx.constraintlayout.v220
+    implementation libs.androidx.activity.ktx
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.androidx.lifecycle.livedata.ktx
 
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
