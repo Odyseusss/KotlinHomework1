@@ -9,4 +9,5 @@ data class Post(
     val likedByMe: Boolean = false,
     val shares: Int = 0,
     val sharedByMe: Boolean = false,
+    val video: String? = null,
 )

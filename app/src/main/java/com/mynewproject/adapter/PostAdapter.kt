@@ -1,8 +1,11 @@
 package com.mynewproject.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -61,6 +64,18 @@ class PostViewHolder(
 //                icShare.setImageResource(R.drawable.ic_share_24)
 //            }
 
+            if (post.video != null) {
+                videoGroup.visibility = View.VISIBLE
+                videoGroup.setOnClickListener {
+                    openVideo(post.video, it.context)
+                }
+                playButton.setOnClickListener {
+                    openVideo(post.video, it.context)
+                }
+            } else {
+                videoGroup.visibility = View.GONE
+            }
+
             icLikes.isChecked = post.likedByMe
             icLikes.text = shortNumber(post.likes)
             icShare.isChecked = post.sharedByMe
@@ -81,10 +96,12 @@ class PostViewHolder(
                                 onInteractionListener.remove(post)
                                 true
                             }
+
                             R.id.edit -> {
                                 onInteractionListener.edit(post)
                                 true
                             }
+
                             else -> false
                         }
                     }
@@ -92,6 +109,19 @@ class PostViewHolder(
 
             }
         }
+    }
+}
+
+private fun openVideo(videoUrl: String, context: android.content.Context) {
+    try {
+        val intent = Intent(Intent.ACTION_VIEW, videoUrl.toUri())
+        context.startActivity(intent)
+    } catch (e: Exception) {
+        android.widget.Toast.makeText(
+            context,
+            "Не удалось открыть видео",
+            android.widget.Toast.LENGTH_SHORT
+        ).show()
     }
 }
 

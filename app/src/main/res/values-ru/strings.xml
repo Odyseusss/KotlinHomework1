@@ -14,4 +14,8 @@
     <string name="netology">Нетология</string>
     <string name="delete_button">Удалить</string>
     <string name="pencil">Карандаш</string>
+    <string name="chooser_share_post">Поделиться постом</string>
+    <string name="edit_post">Редактирование записи</string>
+    <string name="create_post">Создание записи</string>
+    <string name="new_post">Новый пост</string>
 </resources>

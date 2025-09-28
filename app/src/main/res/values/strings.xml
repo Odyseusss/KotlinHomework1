@@ -11,7 +11,11 @@
     <string name="menu_edit">Edit</string>
     <string name="error_empty_content">Content can\'t be empty</string>
     <string name="edit_message">Edit Message</string>
-    <string name="netology">Нетология</string>
+    <string name="netology">Netology</string>
     <string name="delete_button">deleteButton</string>
     <string name="pencil">pencil</string>
+    <string name="chooser_share_post">Share post</string>
+    <string name="edit_post">Edit post</string>
+    <string name="create_post">Create post</string>
+    <string name="new_post">New post</string>
 </resources>
