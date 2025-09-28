@@ -42,4 +42,12 @@ class PostViewModel: ViewModel() {
     fun cancelEdit() {
         edited.value = empty
     }
+
+    fun saveAfterEdit(content: String) {
+        edited.value?.let { post ->
+            val updatedPost = post.copy(content = content)
+            repository.save(updatedPost)
+        }
+        edited.value = empty
+    }
 }

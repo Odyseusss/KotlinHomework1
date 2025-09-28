@@ -4,49 +4,46 @@ plugins {
 }
 
 android {
-    namespace 'com.mynewproject'
-    compileSdk 36
+    namespace = "com.mynewproject"
+    compileSdk = 36
 
     defaultConfig {
-        applicationId "ru.netology.nmedia"
-        minSdk 24
-        targetSdk 36
-        versionCode 1
-        versionName "1.0"
+        applicationId = "com.mynewproject"
+        minSdk = 24
+        targetSdk = 36
+        versionCode = 1
+        versionName = "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = "11"
     }
-
-    buildFeatures.viewBinding = true
 }
 
 dependencies {
-    def activity_version = "1.10.0"
-    def lifecycle_version = "2.8.7"
-
-    implementation libs.androidx.core.ktx.v1160
-    implementation libs.androidx.appcompat.v170
-    implementation libs.material.v1120
-    implementation libs.androidx.constraintlayout.v220
-    implementation libs.androidx.activity.ktx
-    implementation libs.androidx.lifecycle.viewmodel.ktx
-    implementation libs.androidx.lifecycle.livedata.ktx
-
-    testImplementation libs.junit
-    androidTestImplementation libs.androidx.junit
-    androidTestImplementation libs.androidx.espresso.core
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.constraintlayout)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }

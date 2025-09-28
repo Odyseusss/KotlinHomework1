@@ -24,6 +24,7 @@ class PostRepositoryInMemory : PostRepository {
             likes = 100,
             shares = 30,
             likedByMe = false,
+            video = "https://rutube.ru/video/6550a91e7e523f9503bed47e4c46d0cb",
         ),
     )
 
@@ -81,6 +82,6 @@ class PostRepositoryInMemory : PostRepository {
         } else {
             posts.map { if (it.id != post.id) it else it.copy(content = post.content)}
         }
-            data.value = posts
+        data.value = posts
     }
 }
