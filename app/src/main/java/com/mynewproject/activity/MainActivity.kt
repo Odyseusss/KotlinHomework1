@@ -2,8 +2,10 @@ package com.mynewproject.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import com.mynewproject.R
 import com.mynewproject.adapter.OnInteractionListener
 import com.mynewproject.adapter.PostAdapter
@@ -20,13 +22,19 @@ class MainActivity : AppCompatActivity() {
         val viewModel: PostViewModel by viewModels()
 
         val newPostLauncher = registerForActivityResult(NewPostContract) { result ->
-            result ?: return@registerForActivityResult
-            viewModel.save(result)
+            if (result != null) {
+                viewModel.save(result.content)
+            } else {
+                viewModel.cancelEdit()
+            }
         }
 
         val editPostLauncher = registerForActivityResult(NewPostContract) { result ->
-            result ?: return@registerForActivityResult
-            viewModel.save(result)
+            if (result != null) {
+                viewModel.saveAfterEdit(result.content, result.postId)
+            } else {
+                viewModel.cancelEdit()
+            }
         }
 
         val adapter = PostAdapter(object : OnInteractionListener {
@@ -50,10 +58,15 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun edit(post: Post) {
+                viewModel.edit(post)
                 editPostLauncher.launch(post)
             }
 
+            override fun onVideoClick(videoUrl: String) {
+                openVideo(videoUrl)
+            }
         })
+
         binding.list.adapter = adapter
 
         viewModel.data.observe(this) { posts ->
@@ -97,6 +110,14 @@ class MainActivity : AppCompatActivity() {
 //        }
         binding.add.setOnClickListener {
             newPostLauncher.launch(null)
+        }
+    }
+    private fun openVideo(videoUrl: String) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, videoUrl.toUri())
+            startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(this, R.string.video_open_error, Toast.LENGTH_SHORT).show()
         }
     }
 }

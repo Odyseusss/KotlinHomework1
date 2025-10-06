@@ -18,4 +18,6 @@
     <string name="edit_post">Редактирование записи</string>
     <string name="create_post">Создание записи</string>
     <string name="new_post">Новый пост</string>
+    <string name="video_open_error">Не удалось открыть видео</string>
+
 </resources>

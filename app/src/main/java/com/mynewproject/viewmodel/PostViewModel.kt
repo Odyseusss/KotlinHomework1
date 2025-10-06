@@ -28,13 +28,10 @@ class PostViewModel: ViewModel() {
     fun share(id: Long) = repository.shareById(id)
     fun remove(id: Long) = repository.removeById(id)
     fun save(text: String) {
-        edited.value?.let {
             val content = text.trim()
-            if (content != it.content) {
-                repository.save(it.copy(content = content))
+            if (content.isNotEmpty()) {
+                repository.save(empty.copy(content = content))
             }
-        }
-        edited.value = empty
     }
     fun edit(post: Post) {
         edited.value = post
@@ -43,10 +40,16 @@ class PostViewModel: ViewModel() {
         edited.value = empty
     }
 
-    fun saveAfterEdit(content: String) {
-        edited.value?.let { post ->
-            val updatedPost = post.copy(content = content)
-            repository.save(updatedPost)
+    fun saveAfterEdit(content: String, postId: Long) {
+        val trimmedContent = content.trim()
+        if (trimmedContent.isNotEmpty() && postId != 0L) {
+            val updatedPost = edited.value?.copy(
+                id = postId,
+                content = trimmedContent
+            )
+            updatedPost?.let {
+                repository.save(it)
+            }
         }
         edited.value = empty
     }
