@@ -1,5 +1,6 @@
 package com.mynewproject.activity
 
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -57,7 +58,7 @@ class NewPostActivity : AppCompatActivity() {
     }
 }
 
-object NewPostContract : ActivityResultContract<Post?, String?>() {
+object NewPostContract : ActivityResultContract<Post?, PostResult?>() {
     override fun createIntent(context: Context, input: Post?) =
         Intent(context, NewPostActivity::class.java).apply {
             input?.let { post ->
@@ -66,6 +67,18 @@ object NewPostContract : ActivityResultContract<Post?, String?>() {
             }
         }
 
-    override fun parseResult(resultCode: Int, intent: Intent?) =
-        intent?.getStringExtra(Intent.EXTRA_TEXT)
+    override fun parseResult(resultCode: Int, intent: Intent?): PostResult? {
+        if (resultCode != RESULT_OK) return null
+        return intent?.let {
+            PostResult(
+                content = it.getStringExtra(Intent.EXTRA_TEXT) ?: "",
+                postId = it.getLongExtra("EDITED_POST_ID", 0L)
+            )
+        }
+    }
 }
+
+data class PostResult(
+    val content: String,
+    val postId: Long,
+)
