@@ -1,11 +1,12 @@
 package com.mynewproject.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.mynewproject.dto.Post
 import com.mynewproject.repository.PostRepository
-import com.mynewproject.repository.PostRepositoryInMemory
+import com.mynewproject.repository.PostRepositoryFiles
 import kotlin.String
 
 private val empty = Post(
@@ -19,9 +20,9 @@ private val empty = Post(
     sharedByMe = false,
 )
 
-class PostViewModel: ViewModel() {
+class PostViewModel(application: Application): AndroidViewModel(application) {
 
-    private val repository: PostRepository = PostRepositoryInMemory()
+    private val repository: PostRepository = PostRepositoryFiles(application)
     val data: LiveData<List<Post>> = repository.get()
     val edited = MutableLiveData(empty)
     fun like(id: Long) = repository.likeById(id)
