@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp"
-        tools:context=".activity.MainActivity">
+        tools:context=".activity.FeedFragment">
 
         <ImageView
             android:id="@+id/avatar"
@@ -48,10 +48,10 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/menu"
             style="?attr/materialIconButtonStyle"
-            app:iconTint="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_more_vert_24"
+            app:iconTint="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -131,11 +131,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/common_margin"
-            app:icon="@drawable/share_selector"
             android:checkable="true"
             android:minWidth="0dp"
             android:text="5"
             android:textColor="@color/black"
+            app:icon="@drawable/share_selector"
             app:iconPadding="4dp"
             app:layout_constraintBottom_toBottomOf="@id/ic_likes"
             app:layout_constraintStart_toEndOf="@id/ic_likes"

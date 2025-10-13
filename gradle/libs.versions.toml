@@ -10,6 +10,7 @@ appcompatVersion = "1.7.1"
 constraintlayoutVersion = "2.2.1"
 coreKtxVersion = "1.17.0"
 espressoCoreVersion = "3.7.0"
+fragmentKtx = "1.8.9"
 googleMaterial = "1.13.0"
 kotlin = "2.2.20"
 coreKtx = "1.17.0"
@@ -24,8 +25,11 @@ material = "1.13.0"
 activity = "1.11.0"
 constraintlayout = "2.2.1"
 materialVersion = "1.13.0"
+navigationFragmentKtx = "2.9.5"
+navigationFragmentKtxVersion = "2.8.3"
 recyclerview = "1.4.0"
 gson = "2.13.2"
+uiKtx = "1.x.x"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
@@ -38,12 +42,17 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-core-ktx-v1120 = { module = "androidx.core:core-ktx", version.ref = "androidxCoreKtx" }
 androidx-core-ktx-v1160 = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
 androidx-espresso-core-v370 = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-junit-v130 = { module = "androidx.test.ext:junit", version.ref = "androidxJunit" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleViewmodelKtx" }
 androidx-lifecycle-livedata-ktx-v270 = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 androidx-lifecycle-viewmodel-ktx-v270 = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtxVersion" }
+androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+androidx-navigation-fragment-ktx-v283 = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtxVersion" }
+androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationFragmentKtx" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
+androidx-ui-ktx = { module = "androidx.ui:ui-ktx", version.ref = "uiKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -54,6 +63,7 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 material-v1110 = { module = "com.google.android.material:material", version.ref = "googleMaterial" }
 material-v1120 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson"}
+navigation-ui-ktx = { module = "adnroidx.navigation:navigation-ui-ktx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
