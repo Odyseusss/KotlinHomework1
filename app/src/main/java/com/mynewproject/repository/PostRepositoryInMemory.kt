@@ -36,7 +36,7 @@ class PostRepositoryInMemory : PostRepository {
 
     override fun likeById(id: Long) {
 
-        posts = posts.map {post ->
+        posts = posts.map { post ->
             if (post.id == id) {
                 post.copy(
                     likedByMe = !post.likedByMe,
@@ -54,7 +54,7 @@ class PostRepositoryInMemory : PostRepository {
     }
 
     override fun shareById(id: Long) {
-        posts = posts.map {post ->
+        posts = posts.map { post ->
             if (post.id == id) {
                 post.copy(
                     sharedByMe = !post.sharedByMe,
@@ -80,7 +80,7 @@ class PostRepositoryInMemory : PostRepository {
         posts = if (post.id == 0L) {
             listOf(post.copy(id = nextId++, author = "Me", published = "now")) + posts
         } else {
-            posts.map { if (it.id != post.id) it else it.copy(content = post.content)}
+            posts.map { if (it.id != post.id) it else it.copy(content = post.content) }
         }
         data.value = posts
     }

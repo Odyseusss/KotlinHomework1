@@ -20,7 +20,7 @@ private val empty = Post(
     sharedByMe = false,
 )
 
-class PostViewModel(application: Application): AndroidViewModel(application) {
+class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: PostRepository = PostRepositoryFiles(application)
     val data: LiveData<List<Post>> = repository.get()
@@ -29,29 +29,23 @@ class PostViewModel(application: Application): AndroidViewModel(application) {
     fun share(id: Long) = repository.shareById(id)
     fun remove(id: Long) = repository.removeById(id)
     fun save(text: String) {
-            val content = text.trim()
-            if (content.isNotEmpty()) {
-                repository.save(empty.copy(content = content))
-            }
-    }
-    fun edit(post: Post) {
-        edited.value = post
-    }
-    fun cancelEdit() {
-        edited.value = empty
-    }
-
-    fun saveAfterEdit(content: String, postId: Long) {
-        val trimmedContent = content.trim()
-        if (trimmedContent.isNotEmpty() && postId != 0L) {
-            val updatedPost = edited.value?.copy(
-                id = postId,
-                content = trimmedContent
-            )
-            updatedPost?.let {
+        edited.value?.let {
+            if (it.content.isNotBlank()) {
                 repository.save(it)
             }
         }
-        edited.value = empty
+        edited.value = Post(id = 0, author = "", content = "", published = "")
+    }
+
+    fun edit(post: Post) {
+        edited.value = post
+    }
+
+    fun changeContent(content: String) {
+        val text = content.trim()
+        if (edited.value?.content == text) {
+            return
+        }
+        edited.value = edited.value?.copy(content = text)
     }
 }

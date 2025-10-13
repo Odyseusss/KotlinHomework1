@@ -17,7 +17,8 @@ object AndroidUtils {
         if (view.hasWindowFocus()) {
             showKeyboardNow(view)
         } else {
-            view.viewTreeObserver.addOnWindowFocusChangeListener(object : OnWindowFocusChangeListener {
+            view.viewTreeObserver.addOnWindowFocusChangeListener(object :
+                OnWindowFocusChangeListener {
                 override fun onWindowFocusChanged(hasFocus: Boolean) {
                     if (hasFocus) {
                         showKeyboardNow(view)
