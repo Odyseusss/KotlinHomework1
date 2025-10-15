@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mynewproject.dto.Post
 import com.mynewproject.repository.PostRepository
-import com.mynewproject.repository.PostRepositoryFiles
+import com.mynewproject.repository.PostRepositorySQLite
 import kotlin.String
 
 private val empty = Post(
@@ -22,7 +22,7 @@ private val empty = Post(
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository: PostRepository = PostRepositoryFiles(application)
+    private val repository: PostRepository = PostRepositorySQLite(application)
     val data: LiveData<List<Post>> = repository.get()
     val edited = MutableLiveData(empty)
     fun like(id: Long) = repository.likeById(id)
