@@ -26,10 +26,12 @@ activity = "1.11.0"
 constraintlayout = "2.2.1"
 materialVersion = "1.13.0"
 navigationFragmentKtx = "2.9.5"
-navigationFragmentKtxVersion = "2.8.3"
+navigationFragmentKtxVersion = "2.9.5"
 recyclerview = "1.4.0"
 gson = "2.13.2"
+roomRuntime = "2.8.2"
 uiKtx = "1.x.x"
+ksp = "2.2.20-2.0.3"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
@@ -52,6 +54,9 @@ androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fr
 androidx-navigation-fragment-ktx-v283 = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtxVersion" }
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationFragmentKtx" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-ui-ktx = { module = "androidx.ui:ui-ktx", version.ref = "uiKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -68,4 +73,5 @@ navigation-ui-ktx = { module = "adnroidx.navigation:navigation-ui-ktx" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 

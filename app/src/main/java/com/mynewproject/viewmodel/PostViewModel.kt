@@ -2,50 +2,50 @@ package com.mynewproject.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.mynewproject.db.AppDb
 import com.mynewproject.dto.Post
 import com.mynewproject.repository.PostRepository
-import com.mynewproject.repository.PostRepositorySQLite
-import kotlin.String
+import com.mynewproject.repository.PostRepositoryImpl
 
 private val empty = Post(
     id = 0,
     author = "",
-    published = "",
     content = "",
+    published = "",
     likes = 0,
-    likedByMe = false,
-    shares = 0,
-    sharedByMe = false,
+    likedByMe = false
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository: PostRepository = PostRepositorySQLite(application)
-    val data: LiveData<List<Post>> = repository.get()
+    private val repository: PostRepository = PostRepositoryImpl(
+        AppDb.getInstance(application).postDao()
+    )
+    val data = repository.getAll()
     val edited = MutableLiveData(empty)
-    fun like(id: Long) = repository.likeById(id)
-    fun share(id: Long) = repository.shareById(id)
-    fun remove(id: Long) = repository.removeById(id)
-    fun save(text: String) {
+
+    fun save() {
         edited.value?.let {
-            if (it.content.isNotBlank()) {
-                repository.save(it)
-            }
+            repository.save(it)
         }
-        edited.value = Post(id = 0, author = "", content = "", published = "")
+        edited.value = empty
     }
 
     fun edit(post: Post) {
         edited.value = post
     }
-
+    fun shareById(id: Long) = repository.shareById(id)
+    fun likeById(id: Long) = repository.likeById(id)
+    fun removeById(id: Long) = repository.removeById(id)
     fun changeContent(content: String) {
-        val text = content.trim()
-        if (edited.value?.content == text) {
-            return
+        edited.value?.let {
+            val trimmed = content.trim()
+            if (it.content != trimmed) {
+                edited.value = it.copy(content = trimmed)
+            }
         }
-        edited.value = edited.value?.copy(content = text)
+    }
+    fun cancelEdit() {
+        edited.value = empty
     }
 }
