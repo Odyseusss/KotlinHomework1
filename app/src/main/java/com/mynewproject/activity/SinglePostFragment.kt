@@ -60,7 +60,12 @@ class SinglePostFragment : Fragment() {
                 startActivity(intent)
             }
 
-            override fun onPostClick(post: Post) {}
+            override fun onPostClick(post: Post) {
+                findNavController().navigate(
+                    R.id.action_feedFragment_to_singlePostFragment,
+                    Bundle().apply { postIdArg = post.id }
+                )
+            }
         })
 
         viewModel.data.observe(viewLifecycleOwner) { posts ->

@@ -16,17 +16,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
     }
 
     override fun shareById(id: Long) {
-        val posts = dao.getAll().value ?: return
-        val post = posts.find { it.id == id } ?: return
-
-        val newSharedByMe = !post.sharedByMe
-        val newShares = if (newSharedByMe) post.shares + 1 else (post.shares - 1).coerceAtLeast(0)
-
-        dao.updateContentById(
-            id = id,
-            content = post.content
-        )
-
+        dao.shareById(id)
     }
 
     override fun removeById(id: Long) {
