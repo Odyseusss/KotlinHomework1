@@ -15,6 +15,7 @@ import com.mynewproject.databinding.FragmentFeedBinding
 import com.mynewproject.dto.Post
 import com.mynewproject.viewmodel.PostViewModel
 import androidx.fragment.app.activityViewModels
+import com.mynewproject.activity.SinglePostFragment.Companion.postIdArg
 
 class FeedFragment : Fragment() {
 
@@ -58,7 +59,7 @@ class FeedFragment : Fragment() {
             override fun onPostClick(post: Post) {
                 findNavController().navigate(
                     R.id.action_feedFragment_to_singlePostFragment,
-                    Bundle().apply { putLong("postId", post.id) }
+                    Bundle().apply { postIdArg = post.id }
                 )
             }
         })
