@@ -7,19 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.mynewproject.adapter.OnInteractionListener
 import com.mynewproject.R
+import com.mynewproject.adapter.OnInteractionListener
 import com.mynewproject.adapter.PostViewHolder
 import com.mynewproject.databinding.FragmentSinglePostBinding
 import com.mynewproject.dto.Post
 import com.mynewproject.viewmodel.PostViewModel
 import com.mynewproject.util.LongArg
+import androidx.fragment.app.activityViewModels
 
 class SinglePostFragment : Fragment() {
 
-    private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
+    private val viewModel: PostViewModel by activityViewModels()
 
     companion object {
         var Bundle.postIdArg: Long by LongArg
@@ -29,9 +29,8 @@ class SinglePostFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentSinglePostBinding.inflate(inflater, container, false)
-
         val postId = arguments?.postIdArg ?: return binding.root
 
         val viewHolder = PostViewHolder(binding.postLayout, object : OnInteractionListener {
@@ -40,14 +39,11 @@ class SinglePostFragment : Fragment() {
                 findNavController().navigate(R.id.action_singlePostFragment_to_newPostFragment)
             }
 
-            override fun like(post: Post) {
-                viewModel.like(post.id)
-            }
+            override fun like(post: Post) = viewModel.likeById(post.id)
 
             override fun share(post: Post) {
-                viewModel.share(post.id)
-                val intent = Intent().apply {
-                    action = Intent.ACTION_SEND
+                viewModel.shareById(post.id)
+                val intent = Intent(Intent.ACTION_SEND).apply {
                     type = "text/plain"
                     putExtra(Intent.EXTRA_TEXT, post.content)
                 }
@@ -55,7 +51,7 @@ class SinglePostFragment : Fragment() {
             }
 
             override fun remove(post: Post) {
-                viewModel.remove(post.id)
+                viewModel.removeById(post.id)
                 findNavController().navigateUp()
             }
 
@@ -65,6 +61,10 @@ class SinglePostFragment : Fragment() {
             }
 
             override fun onPostClick(post: Post) {
+                findNavController().navigate(
+                    R.id.action_feedFragment_to_singlePostFragment,
+                    Bundle().apply { postIdArg = post.id }
+                )
             }
         })
 

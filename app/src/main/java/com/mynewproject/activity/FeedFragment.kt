@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.mynewproject.R
 import com.mynewproject.adapter.OnInteractionListener
@@ -15,8 +14,12 @@ import com.mynewproject.adapter.PostAdapter
 import com.mynewproject.databinding.FragmentFeedBinding
 import com.mynewproject.dto.Post
 import com.mynewproject.viewmodel.PostViewModel
+import androidx.fragment.app.activityViewModels
+import com.mynewproject.activity.SinglePostFragment.Companion.postIdArg
 
 class FeedFragment : Fragment() {
+
+    private val viewModel: PostViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,26 +28,23 @@ class FeedFragment : Fragment() {
     ): View {
         val binding = FragmentFeedBinding.inflate(inflater, container, false)
 
-        val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
-
         val adapter = PostAdapter(object : OnInteractionListener {
             override fun like(post: Post) {
-                viewModel.like(post.id)
+                viewModel.likeById(post.id)
             }
 
             override fun share(post: Post) {
-                viewModel.share(post.id)
+                viewModel.shareById(post.id)
                 val intent = Intent().apply {
                     action = Intent.ACTION_SEND
                     type = "text/plain"
                     putExtra(Intent.EXTRA_TEXT, post.content)
                 }
-                val chooser = Intent.createChooser(intent, getString(R.string.chooser_share_post))
-                startActivity(chooser)
+                startActivity(Intent.createChooser(intent, getString(R.string.chooser_share_post)))
             }
 
             override fun remove(post: Post) {
-                viewModel.remove(post.id)
+                viewModel.removeById(post.id)
             }
 
             override fun edit(post: Post) {
@@ -59,7 +59,7 @@ class FeedFragment : Fragment() {
             override fun onPostClick(post: Post) {
                 findNavController().navigate(
                     R.id.action_feedFragment_to_singlePostFragment,
-                    Bundle().apply { putLong("postId", post.id) }
+                    Bundle().apply { postIdArg = post.id }
                 )
             }
         })
@@ -69,15 +69,15 @@ class FeedFragment : Fragment() {
         viewModel.data.observe(viewLifecycleOwner) { posts ->
             val new = posts.size > adapter.currentList.size && adapter.currentList.isNotEmpty()
             adapter.submitList(posts) {
-                if (new) {
-                    binding.list.smoothScrollToPosition(0)
-                }
+                if (new) binding.list.smoothScrollToPosition(0)
             }
         }
 
         binding.add.setOnClickListener {
+            viewModel.cancelEdit()
             findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
         }
+
         return binding.root
     }
 
