@@ -2,11 +2,14 @@ package com.mynewproject.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.mynewproject.db.AppDb
 import com.mynewproject.dto.Post
+import com.mynewproject.model.FeedModel
 import com.mynewproject.repository.PostRepository
-import com.mynewproject.repository.PostRepositoryImpl
+import com.mynewproject.repository.PostRepositoryNetwork
+import com.mynewproject.util.SingleLiveEvent
+import kotlin.concurrent.thread
 
 private val empty = Post(
     id = 0,
@@ -18,34 +21,89 @@ private val empty = Post(
 )
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: PostRepository = PostRepositoryImpl(
-        AppDb.getInstance(application).postDao()
-    )
-    val data = repository.getAll()
+    private val repository: PostRepository = PostRepositoryNetwork()
+
+    private val _data: MutableLiveData<FeedModel> = MutableLiveData(FeedModel())
+
+    val data: LiveData<FeedModel>
+        get() = _data
     val edited = MutableLiveData(empty)
 
-    fun save() {
-        edited.value?.let {
-            repository.save(it)
-        }
-        edited.value = empty
+    private val _postCreated = SingleLiveEvent<Unit>()
+
+    val postCreated: LiveData<Unit>
+        get() = _postCreated
+
+    init {
+        load()
     }
 
-    fun edit(post: Post) {
-        edited.value = post
+    fun save() {
+        thread {
+            edited.value?.let {
+                repository.save(it)
+                _postCreated.postValue(Unit)
+            }
+            edited.postValue(empty)
+        }
     }
-    fun shareById(id: Long) = repository.shareById(id)
-    fun likeById(id: Long) = repository.likeById(id)
-    fun removeById(id: Long) = repository.removeById(id)
-    fun changeContent(content: String) {
-        edited.value?.let {
-            val trimmed = content.trim()
-            if (it.content != trimmed) {
-                edited.value = it.copy(content = trimmed)
+
+    fun load() {
+        thread {
+            _data.postValue(FeedModel(loading = true))
+            try {
+                val posts = repository.getAll()
+                _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
+            } catch (_: Exception) {
+                _data.postValue(FeedModel(error = true))
             }
         }
     }
+
+    fun edit(post: Post) {
+        thread {
+            edited.value = post
+            load()
+        }
+    }
+
+    fun shareById(id: Long) {
+        thread {
+            repository.shareById(id)
+            load()
+        }
+    }
+
+    fun likeById(id: Long) {
+        thread {
+            repository.likeById(id)
+            load()
+        }
+    }
+
+    fun removeById(id: Long) {
+        thread {
+            repository.removeById(id)
+            load()
+        }
+    }
+
+    fun changeContent(content: String) {
+        thread {
+            edited.value?.let {
+                val trimmed = content.trim()
+                if (it.content != trimmed) {
+                    edited.value = it.copy(content = trimmed)
+                    load()
+                }
+            }
+        }
+    }
+
     fun cancelEdit() {
-        edited.value = empty
+        thread {
+            edited.value = empty
+            load()
+        }
     }
 }
