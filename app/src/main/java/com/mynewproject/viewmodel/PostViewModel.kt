@@ -62,29 +62,25 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun edit(post: Post) {
         thread {
-            edited.value = post
-            load()
+            edited.postValue(post)
         }
     }
 
     fun shareById(id: Long) {
         thread {
             repository.shareById(id)
-            load()
         }
     }
 
     fun likeById(id: Long) {
         thread {
             repository.likeById(id)
-            load()
         }
     }
 
     fun removeById(id: Long) {
         thread {
             repository.removeById(id)
-            load()
         }
     }
 
@@ -93,8 +89,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             edited.value?.let {
                 val trimmed = content.trim()
                 if (it.content != trimmed) {
-                    edited.value = it.copy(content = trimmed)
-                    load()
+                    edited.postValue(it.copy(content = trimmed))
                 }
             }
         }
@@ -102,8 +97,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     fun cancelEdit() {
         thread {
-            edited.value = empty
-            load()
+            edited.postValue(empty)
         }
     }
 }
