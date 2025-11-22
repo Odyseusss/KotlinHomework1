@@ -38,11 +38,18 @@ class PostRepositoryNetwork() : PostRepository {
         return gson.fromJson(textBody, type)
     }
 
-    override fun likeById(id: Long) {
-        val request = Request.Builder()
-            .url("${BASE_URL}api/posts/$id/likes")
-            .post("".toRequestBody())
-            .build()
+    override fun likeById(post: Post) {
+        val request = if (!post.likedByMe) {
+            Request.Builder()
+                .url("${BASE_URL}api/posts/${post.id}/likes")
+                .post("".toRequestBody())
+                .build()
+        } else {
+            Request.Builder()
+                .url("${BASE_URL}api/posts/${post.id}/likes")
+                .delete()
+                .build()
+        }
 
         client.newCall(request).execute()
     }

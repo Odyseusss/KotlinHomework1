@@ -72,9 +72,10 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun likeById(id: Long) {
+    fun likeById(post: Post) {
         thread {
-            repository.likeById(id)
+            repository.likeById(post)
+            load()
         }
     }
 
@@ -85,19 +86,15 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun changeContent(content: String) {
-        thread {
-            edited.value?.let {
-                val trimmed = content.trim()
-                if (it.content != trimmed) {
-                    edited.postValue(it.copy(content = trimmed))
-                }
+        edited.value?.let {
+            val trimmed = content.trim()
+            if (it.content != trimmed) {
+                edited.value = it.copy(content = trimmed)
             }
         }
     }
 
     fun cancelEdit() {
-        thread {
-            edited.postValue(empty)
-        }
+        edited.value = empty
     }
 }

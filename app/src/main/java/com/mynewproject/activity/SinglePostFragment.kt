@@ -39,7 +39,7 @@ class SinglePostFragment : Fragment() {
                 findNavController().navigate(R.id.action_singlePostFragment_to_newPostFragment)
             }
 
-            override fun like(post: Post) = viewModel.likeById(post.id)
+            override fun like(post: Post) = viewModel.likeById(post)
 
             override fun share(post: Post) {
                 viewModel.shareById(post.id)
