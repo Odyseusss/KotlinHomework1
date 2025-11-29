@@ -6,10 +6,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mynewproject.dto.Post
 import com.mynewproject.model.FeedModel
+import com.mynewproject.repository.GetAllCallBack
+import com.mynewproject.repository.PostCallback
 import com.mynewproject.repository.PostRepository
 import com.mynewproject.repository.PostRepositoryNetwork
+import com.mynewproject.repository.SaveCallback
 import com.mynewproject.util.SingleLiveEvent
-import kotlin.concurrent.thread
 
 private val empty = Post(
     id = 0,
@@ -22,15 +24,11 @@ private val empty = Post(
 
 class PostViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: PostRepository = PostRepositoryNetwork()
-
     private val _data: MutableLiveData<FeedModel> = MutableLiveData(FeedModel())
-
     val data: LiveData<FeedModel>
         get() = _data
     val edited = MutableLiveData(empty)
-
     private val _postCreated = SingleLiveEvent<Unit>()
-
     val postCreated: LiveData<Unit>
         get() = _postCreated
 
@@ -39,59 +37,60 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun save() {
-        thread {
-            edited.value?.let {
-                repository.save(it)
+        val post = edited.value ?: return
+        repository.saveAsync(post, object : SaveCallback {
+            override fun onSuccess(post: Post) {
                 _postCreated.postValue(Unit)
+                edited.postValue(empty)
+                load()
             }
-            edited.postValue(empty)
-        }
+
+            override fun onError(e: Exception) {
+            }
+
+        })
     }
 
     fun load() {
-        thread {
-            _data.postValue(FeedModel(loading = true))
-            try {
-                val posts = repository.getAll()
+        _data.postValue(FeedModel(loading = true))
+        repository.getAllAsync(object : GetAllCallBack {
+            override fun onSuccess(posts: List<Post>) {
                 _data.postValue(FeedModel(posts = posts, empty = posts.isEmpty()))
-            } catch (_: Exception) {
+            }
+
+            override fun onError(e: Exception) {
                 _data.postValue(FeedModel(error = true))
             }
-        }
+        })
     }
 
     fun edit(post: Post) {
-        thread {
-            edited.postValue(post)
-        }
+        edited.postValue(post)
     }
 
     fun shareById(id: Long) {
-        thread {
-            repository.shareById(id)
-        }
+        repository.shareByIdAsync(id, object : PostCallback {
+            override fun onSuccess() = load()
+            override fun onError(e: Exception) {}
+        })
     }
 
     fun likeById(post: Post) {
-        thread {
-            repository.likeById(post)
-            load()
-        }
+        repository.likeByIdAsync(post, object : PostCallback {
+            override fun onSuccess() = load()
+            override fun onError(e: Exception) {}
+        })
     }
 
     fun removeById(id: Long) {
-        thread {
-            repository.removeById(id)
-        }
+        repository.removeByIdAsync(id, object : PostCallback {
+            override fun onSuccess() = load()
+            override fun onError(e: Exception) {}
+        })
     }
 
     fun changeContent(content: String) {
-        edited.value?.let {
-            val trimmed = content.trim()
-            if (it.content != trimmed) {
-                edited.value = it.copy(content = trimmed)
-            }
-        }
+        edited.value = edited.value?.copy(content = content.trim())
     }
 
     fun cancelEdit() {
