@@ -27,6 +27,7 @@ constraintlayout = "2.2.1"
 materialVersion = "1.13.0"
 navigationFragmentKtx = "2.9.5"
 navigationFragmentKtxVersion = "2.9.5"
+okhttp = "5.3.0"
 recyclerview = "1.4.0"
 gson = "2.13.2"
 roomRuntime = "2.8.2"
@@ -75,6 +76,7 @@ gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 navigation-ui-ktx = { module = "adnroidx.navigation:navigation-ui-ktx" }
 firebase = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 play-services = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServices" }
 desugaring = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugaring" }
 

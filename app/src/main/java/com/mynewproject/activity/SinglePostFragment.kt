@@ -39,7 +39,7 @@ class SinglePostFragment : Fragment() {
                 findNavController().navigate(R.id.action_singlePostFragment_to_newPostFragment)
             }
 
-            override fun like(post: Post) = viewModel.likeById(post.id)
+            override fun like(post: Post) = viewModel.likeById(post)
 
             override fun share(post: Post) {
                 viewModel.shareById(post.id)
@@ -68,8 +68,8 @@ class SinglePostFragment : Fragment() {
             }
         })
 
-        viewModel.data.observe(viewLifecycleOwner) { posts ->
-            val post = posts.find { it.id == postId } ?: return@observe
+        viewModel.data.observe(viewLifecycleOwner) { state ->
+            val post = state.posts.find { it.id == postId } ?: return@observe
             viewHolder.bind(post)
         }
 
